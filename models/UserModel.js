@@ -5,7 +5,11 @@ const crypto = require("crypto");
 
 const UserSchema = new mongoose.Schema(
   {
-    username: String,
+    username: {
+      type: String,
+      lowercase: true,
+      unique: true,
+    },
     email: {
       type: String,
       required: [true, "Please provide an email"],
@@ -16,7 +20,7 @@ const UserSchema = new mongoose.Schema(
       ],
       lowercase: true,
     },
-
+    rooms: [mongoose.Types.ObjectId],
     password: {
       type: String,
       required: true,

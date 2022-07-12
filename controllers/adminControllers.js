@@ -1,7 +1,8 @@
 const User = require("../models/UserModel");
 const axios = require("axios");
 const ErrorResponse = require("../utils/errorResponse");
-const TvRoom = require("../models/TvRoomModel");
+const bcrypt = require("bcryptjs");
+const Room = require("../models/RoomModel");
 
 exports.tvSearch = async (req, res, next) => {
   try {
@@ -28,20 +29,28 @@ exports.tvSearch = async (req, res, next) => {
   }
 };
 
-exports.createTvRoom = async (req, res, next) => {
-  const { id, password, roomName } = req.body;
+exports.createRoom = async (req, res, next) => {
+  const { password, roomName } = req.body;
   const { username } = req.user;
   try {
-    const existingRoom = await TV.findOne({
+    const existingRoom = await Room.findOne({
       roomName,
     });
 
-    const newRoom = await TV.create({
-      roomName: data.name,
+    if (existingRoom) {
+      return next(
+        new ErrorResponse("You've already created a room with this name")
+      );
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(password, salt);
+
+    const newRoom = await Room.create({
+      roomName,
       roomMembers: [username],
-      roomPassword: password,
-      roomType: "tv",
-      adminName: username,
+      roomPassword: hashPassword,
+      roomAdmin: username,
     });
 
     res.json({ success: true, data: newRoom });

@@ -21,9 +21,13 @@ const TvSchema = new mongoose.Schema({
   notCaughtUp: [String],
 });
 
-const RoomModel = mongoose.Schema(
+const RoomSchema = mongoose.Schema(
   {
-    roomName: String,
+    roomName: {
+      type: String,
+      unique: true,
+      lowercase: true,
+    },
     roomMembers: [String],
     roomItems: [String],
     roomAdmin: String,
@@ -40,6 +44,6 @@ const RoomModel = mongoose.Schema(
   }
 );
 
-const Room = mongoose.model("Room", MovieRoomSchema);
+const Room = mongoose.model("Room", RoomSchema);
 
 module.exports = Room;
