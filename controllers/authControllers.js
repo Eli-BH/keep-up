@@ -27,11 +27,11 @@ exports.register = async (req, res, next) => {
 };
 
 exports.login = async (req, res, next) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
   try {
     let user = await User.findOne({
-      username,
+      email,
     });
 
     if (!user) {

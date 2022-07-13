@@ -36,6 +36,7 @@ const RoomSchema = mongoose.Schema(
       required: true,
       minlength: 6,
     },
+    roomType: String,
     movieItems: [MovieSchema],
     TvItems: [TvSchema],
   },

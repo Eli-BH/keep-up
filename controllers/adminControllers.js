@@ -30,7 +30,7 @@ exports.tvSearch = async (req, res, next) => {
 };
 
 exports.createRoom = async (req, res, next) => {
-  const { password, roomName } = req.body;
+  const { roomPassword, roomName, roomType } = req.body;
   const { username } = req.user;
   try {
     const existingRoom = await Room.findOne({
@@ -43,13 +43,14 @@ exports.createRoom = async (req, res, next) => {
       );
     }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashPassword = await bcrypt.hash(password, salt);
+    // const salt = await bcrypt.genSalt(10);
+    // const hashPassword = await bcrypt.hash(password, salt);
 
     const newRoom = await Room.create({
       roomName,
+      roomType,
       roomMembers: [username],
-      roomPassword: hashPassword,
+      roomPassword,
       roomAdmin: username,
     });
 
